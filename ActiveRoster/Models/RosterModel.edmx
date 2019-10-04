@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="RosterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_Player">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="RegistrationNumber" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Weight" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="DateOfBirth" Type="date" Nullable="false" />
+          <Property Name="Team" Type="int" Nullable="false" />
+          <Property Name="Coach" Type="bit" Nullable="false" />
+          <Property Name="Image" Type="image" />
+        </EntityType>
+        <EntityType Name="tbl_Team">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_tbl_Player_tbl_Team">
+          <End Role="tbl_Team" Type="Self.tbl_Team" Multiplicity="1" />
+          <End Role="tbl_Player" Type="Self.tbl_Player" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Team">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Player">
+              <PropertyRef Name="Team" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RosterModelStoreContainer">
+          <EntitySet Name="tbl_Player" EntityType="Self.tbl_Player" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Team" EntityType="Self.tbl_Team" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tbl_Player_tbl_Team" Association="Self.FK_tbl_Player_tbl_Team">
+            <End Role="tbl_Team" EntitySet="tbl_Team" />
+            <End Role="tbl_Player" EntitySet="tbl_Player" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RosterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_Player">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RegistrationNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Weight" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Team" Type="Int32" Nullable="false" />
+          <Property Name="Coach" Type="Boolean" Nullable="false" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="tbl_Team" Relationship="Self.FK_tbl_Player_tbl_Team" FromRole="tbl_Player" ToRole="tbl_Team" />
+        </EntityType>
+        <EntityType Name="tbl_Team">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tbl_Player" Relationship="Self.FK_tbl_Player_tbl_Team" FromRole="tbl_Team" ToRole="tbl_Player" />
+        </EntityType>
+        <Association Name="FK_tbl_Player_tbl_Team">
+          <End Role="tbl_Team" Type="Self.tbl_Team" Multiplicity="1" />
+          <End Role="tbl_Player" Type="Self.tbl_Player" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Team">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tbl_Player">
+              <PropertyRef Name="Team" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ActiveRosterDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_Player" EntityType="Self.tbl_Player" />
+          <EntitySet Name="tbl_Team" EntityType="Self.tbl_Team" />
+          <AssociationSet Name="FK_tbl_Player_tbl_Team" Association="Self.FK_tbl_Player_tbl_Team">
+            <End Role="tbl_Team" EntitySet="tbl_Team" />
+            <End Role="tbl_Player" EntitySet="tbl_Player" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RosterModelStoreContainer" CdmEntityContainer="ActiveRosterDBEntities">
+          <EntitySetMapping Name="tbl_Player">
+            <EntityTypeMapping TypeName="RosterModel.tbl_Player">
+              <MappingFragment StoreEntitySet="tbl_Player">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="RegistrationNumber" ColumnName="RegistrationNumber" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Team" ColumnName="Team" />
+                <ScalarProperty Name="Coach" ColumnName="Coach" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Team">
+            <EntityTypeMapping TypeName="RosterModel.tbl_Team">
+              <MappingFragment StoreEntitySet="tbl_Team">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
